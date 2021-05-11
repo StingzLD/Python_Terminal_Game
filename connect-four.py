@@ -1,17 +1,29 @@
 import os
 
+BANNER = '''
+_________                                     __    ___________                 
+\_   ___ \  ____   ____   ____   ____   _____/  |_  \_   _____/___  __ _________ 
+/    \  \/ /  _ \ /    \ /    \_/ __ \_/ ___\   __\  |    __)/  _ \|  |  \_  __ \ 
+\     \___(  <_> )   |  \   |  \  ___/\  \___|  |    |   |  (  <_> )  |  /|  | \/
+ \________/\____/|___|__/___|__/\_____>\_____>__|    \___|   \____/|____/ |__|
+
+
+'''
 ROWS = 6
 COLUMNS = 7
+player_turn = 0
+choice = 0
+game_over = False
 
 # Creates a blank grid for a new game
 def new_grid():
     grid = [
         [0,0,0,0,0,0,0],
-        [1,0,0,0,0,0,0],
-        [2,0,0,0,0,0,0],
-        [3,0,0,0,0,0,0],
-        [4,0,0,0,0,0,0],
-        [5,0,0,0,0,0,0]
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0]
     ]
     return grid
 
@@ -31,17 +43,21 @@ def is_choice_valid(choice):
 def check_win():
     pass
 
+# Refresh grid with new selection
 def refresh_grid():
-    pass
+    os.system('cls' if os.name == 'nt' else 'clear')
+    print(BANNER)
+    print_grid(grid)
 
+# Swap player turn
+def swap_players():
+    global player_turn
+    player_turn = (player_turn + 1) % 2
+    
 
 # Start the game
 grid = new_grid()
-player_turn = 0
-choice = 0
-game_over = False
-
-print_grid(grid)
+refresh_grid()
 
 while game_over == False:
     # Player 1's turn
@@ -53,10 +69,7 @@ while game_over == False:
         choice = int(input("Player 2, please choose a column (1-7):"))
         is_choice_valid(choice)
     
-
-
-    # Refresh grid with new selection
-    os.system('cls' if os.name == 'nt' else 'clear')
-    print_grid(grid)
-    # Switch player's turn
-    player_turn = (player_turn + 1) % 2
+  
+    refresh_grid()
+    swap_players()
+    
