@@ -31,17 +31,22 @@ def new_grid():
 # Prints each row in the grid's list, but in reverse row order, so the 0 row will be on the bottom
 def print_grid(grid):
     for row in range(len(grid)):
-        print(grid[-(row + 1)])
+        print((" " * 28) + str(grid[-(row + 1)]))
+    print("\n")
+
+# Delete previous line in terminal
+def delete_line():
+    sys.stdout.write('\x1b[1A') # Move cursor up one line
+    sys.stdout.write('\x1b[2K') # Delete line
 
 # Ensure the selected column is a valid choice
 def is_choice_valid(choice):
     if choice in range(1, COLUMNS + 1):
         return
     else:
-        # Delete previous line of text and prompt again
-        sys.stdout.write('\x1b[1A') # Move cursor up one line
-        sys.stdout.write('\x1b[2K') # Delete line
-        choice = int(input("Please enter a valid column number (1-7):"))
+        delete_line()
+        delete_line()
+        choice = int(input((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
         is_choice_valid(choice)
 
 def check_win():
@@ -64,16 +69,11 @@ grid = new_grid()
 refresh_grid()
 
 while game_over == False:
-    # Player 1's turn
-    if player_turn == 0:
-        choice = int(input("Player 1, please choose a column (1-7):"))
-        is_choice_valid(choice)
-    # Player 2's turn
-    else:
-        choice = int(input("Player 2, please choose a column (1-7):"))
-        is_choice_valid(choice)
+    choice = int(input("Player " + str(player_turn + 1) + ", please choose a column (1-7):"))
+    is_choice_valid(choice)
     
   
     refresh_grid()
+    check_win()
     swap_players()
     
