@@ -1,5 +1,7 @@
 # Python Terminal Game
 
+*** **THIS IS A WORK IN PROGRESS** ***
+
 ![Screenshot](/screenshot-connect-four.png "Python Terminal Connect Four")
 
 ## Description
