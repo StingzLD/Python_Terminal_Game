@@ -1,6 +1,6 @@
 # Python Terminal Game
 
-![picture]
+![alt text][picture]
 [picture]: https://imgur.com/NhNeIeE "Python Terminal Connect Four"
 
 ## Description
