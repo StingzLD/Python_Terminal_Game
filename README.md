@@ -1,6 +1,6 @@
 # Python Terminal Game
 
-![Screenshot](https://i.imgur.com/NhNeIeE.png "Python Terminal Connect Four")
+![Screenshot](/screenshot-connect-four.png "Python Terminal Connect Four")
 
 ## Description
 This is a quick terminal game that will be written in Python. Being that the requirements are that it is played in the terminal itself, not launching a GUI, I wanted to start off with a game like Connect Four. Should this end up being too simplistic, I will likely use this repository for multiple games and create a second, more complex game.
