@@ -1,4 +1,5 @@
 import os
+import sys
 
 BANNER = '''
 _________                                     __    ___________                 
@@ -37,6 +38,9 @@ def is_choice_valid(choice):
     if choice in range(1, COLUMNS + 1):
         return
     else:
+        # Delete previous line of text and prompt again
+        sys.stdout.write('\x1b[1A') # Move cursor up one line
+        sys.stdout.write('\x1b[2K') # Delete line
         choice = int(input("Please enter a valid column number (1-7):"))
         is_choice_valid(choice)
 
