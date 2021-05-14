@@ -14,6 +14,7 @@ ROWS = 6
 COLUMNS = 7
 player_turn = 0
 choice = 0
+row = 0
 game_over = False
 
 # Creates a blank grid for a new game
@@ -41,13 +42,39 @@ def delete_line():
 
 # Ensure the selected column is a valid choice
 def is_choice_valid(choice):
-    if choice in range(1, COLUMNS + 1):
-        return
-    else:
+    try:
+        if choice -1 >= 0 and choice -1 < 8:
+            if grid[ROWS - 1][choice -1] == 0:
+                if choice in range(1, COLUMNS + 1):
+                    return
+                else:
+                    delete_line()
+                    delete_line()
+                    choice = int(input((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+                    is_choice_valid(choice)
+            else:
+                delete_line()
+                delete_line()
+                choice = int(input((" " * 24) + f"*** NO MORE OPEN SPACES IN COLUMN {choice} ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+                is_choice_valid(choice)
+        else:
+            delete_line()
+            delete_line()
+            choice = int(input((" " * 24) + "*** COLUMN NUMBER TOO LOW ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+            is_choice_valid(choice)
+    except:
         delete_line()
         delete_line()
-        choice = int(input((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+        choice = int(input((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
         is_choice_valid(choice)
+
+def find_open_row(choice):
+    for row in range(ROWS):
+        if grid[row][choice -1] == 0:
+            return row
+
+def place_piece(row, choice):
+    grid[row][choice - 1] = player_turn + 1
 
 def check_win():
     pass
@@ -71,8 +98,8 @@ refresh_grid()
 while game_over == False:
     choice = int(input("Player " + str(player_turn + 1) + ", please choose a column (1-7):"))
     is_choice_valid(choice)
-    
-  
+    row = find_open_row(choice)
+    place_piece(row, choice)
     refresh_grid()
     check_win()
     swap_players()
