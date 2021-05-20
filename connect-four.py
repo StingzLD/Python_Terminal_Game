@@ -12,7 +12,7 @@ _________                                     __    ___________
 '''
 ROWS = 6
 COLUMNS = 7
-player_turn = 0
+player = 1
 choice = 0
 row = 0
 game_over = False
@@ -50,22 +50,22 @@ def is_choice_valid(choice):
                 else:
                     delete_line()
                     delete_line()
-                    choice = int(input((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+                    choice = int(input((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player) + ", please enter a valid column number (1-7):"))
                     is_choice_valid(choice)
             else:
                 delete_line()
                 delete_line()
-                choice = int(input((" " * 24) + f"*** NO MORE OPEN SPACES IN COLUMN {choice} ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+                choice = int(input((" " * 24) + f"*** NO MORE OPEN SPACES IN COLUMN {choice} ***\nPlayer " + str(player) + ", please enter a valid column number (1-7):"))
                 is_choice_valid(choice)
         else:
             delete_line()
             delete_line()
-            choice = int(input((" " * 24) + "*** COLUMN NUMBER TOO LOW ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+            choice = int(input((" " * 24) + "*** COLUMN NUMBER TOO LOW ***\nPlayer " + str(player) + ", please enter a valid column number (1-7):"))
             is_choice_valid(choice)
     except:
         delete_line()
         delete_line()
-        choice = int(input((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player_turn + 1) + ", please enter a valid column number (1-7):"))
+        choice = int(input((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player) + ", please enter a valid column number (1-7):"))
         is_choice_valid(choice)
 
 def find_open_row(choice):
@@ -74,9 +74,11 @@ def find_open_row(choice):
             return row
 
 def place_piece(row, choice):
-    grid[row][choice - 1] = player_turn + 1
+    grid[row][choice - 1] = player
 
 def check_win():
+    # Check the row of the last placed piece to see if there are four in a row
+    # Else, check to see if there are four in a row diagonally to the last placed piece
     pass
 
 # Refresh grid with new selection
@@ -87,16 +89,16 @@ def refresh_grid():
 
 # Swap player turn
 def swap_players():
-    global player_turn
-    player_turn = (player_turn + 1) % 2
-    
+    global player
+    player = ((player + 1) % 2) + 1
+
+# Start the game    
 if __name__ == "__main__":
-   # Start the game
    grid = new_grid()
    refresh_grid()
 
    while game_over == False:
-      choice = int(input("Player " + str(player_turn + 1) + ", please choose a column (1-7):"))
+      choice = int(input("Player " + str(player) + ", please choose a column (1-7):"))
       is_choice_valid(choice)
       row = find_open_row(choice)
       place_piece(row, choice)
