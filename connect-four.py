@@ -90,17 +90,17 @@ def swap_players():
     global player_turn
     player_turn = (player_turn + 1) % 2
     
+if __name__ == "__main__":
+   # Start the game
+   grid = new_grid()
+   refresh_grid()
 
-# Start the game
-grid = new_grid()
-refresh_grid()
-
-while game_over == False:
-    choice = int(input("Player " + str(player_turn + 1) + ", please choose a column (1-7):"))
-    is_choice_valid(choice)
-    row = find_open_row(choice)
-    place_piece(row, choice)
-    refresh_grid()
-    check_win()
-    swap_players()
+   while game_over == False:
+      choice = int(input("Player " + str(player_turn + 1) + ", please choose a column (1-7):"))
+      is_choice_valid(choice)
+      row = find_open_row(choice)
+      place_piece(row, choice)
+      refresh_grid()
+      check_win()
+      swap_players()
     
