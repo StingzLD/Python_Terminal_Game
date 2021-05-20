@@ -18,7 +18,7 @@ row = 0
 game_over = False
 
 # Creates a blank grid for a new game
-def new_grid():
+def new_grid() -> list:
     grid = [
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -38,8 +38,8 @@ def print_grid(grid):
 # Delete previous line in terminal
 def delete_line():
     sys.stdout.write('\x1b[1A') # Move cursor up one line
-    sys.stdout.write('\x1b[2K') # Delete line
-
+    sys.stdout.write('\x1b[2K') # Delete line  
+ 
 # Ensure the selected column is a valid choice
 def is_choice_valid(choice):
     try:
@@ -90,17 +90,17 @@ def swap_players():
     global player_turn
     player_turn = (player_turn + 1) % 2
     
+if __name__ == "__main__":
+   # Start the game
+   grid = new_grid()
+   refresh_grid()
 
-# Start the game
-grid = new_grid()
-refresh_grid()
-
-while game_over == False:
-    choice = int(input("Player " + str(player_turn + 1) + ", please choose a column (1-7):"))
-    is_choice_valid(choice)
-    row = find_open_row(choice)
-    place_piece(row, choice)
-    refresh_grid()
-    check_win()
-    swap_players()
+   while game_over == False:
+      choice = int(input("Player " + str(player_turn + 1) + ", please choose a column (1-7):"))
+      is_choice_valid(choice)
+      row = find_open_row(choice)
+      place_piece(row, choice)
+      refresh_grid()
+      check_win()
+      swap_players()
     
