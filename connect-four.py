@@ -18,7 +18,7 @@ row = 0
 game_over = False
 
 # Creates a blank grid for a new game
-def new_grid():
+def new_grid() -> list:
     grid = [
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
@@ -38,8 +38,8 @@ def print_grid(grid):
 # Delete previous line in terminal
 def delete_line():
     sys.stdout.write('\x1b[1A') # Move cursor up one line
-    sys.stdout.write('\x1b[2K') # Delete line
-
+    sys.stdout.write('\x1b[2K') # Delete line  
+ 
 # Ensure the selected column is a valid choice
 def is_choice_valid(choice):
     try:
