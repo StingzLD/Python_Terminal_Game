@@ -45,27 +45,32 @@ def reprompt_choice(msg):
     return new_choice
  
 # Ensure the selected column is a valid choice, if not reprompt until it is
-def check_choice():
+def get_player_choice():
     global choice
     global player
 
-    while True:
-        if choice >= 1 and choice <= 7:
-            if grid[ROWS - 1][choice - 1] == 0:
-                if choice in range(1, COLUMNS + 1):
-                    break
+    try:
+        choice = int(input("Player " + str(player + 1) + ", please choose a column (1-7):"))
+
+        while True:
+            if choice >= 1 and choice <= 7:
+                if grid[ROWS - 1][choice - 1] == 0:
+                    if choice in range(1, COLUMNS + 1):
+                        break
+                    else:
+                        choice = reprompt_choice((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+                        continue
                 else:
-                    choice = reprompt_choice((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+                    choice = reprompt_choice((" " * 24) + f"*** NO MORE OPEN SPACES IN COLUMN {choice} ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
                     continue
-            else:
-                choice = reprompt_choice((" " * 24) + f"*** NO MORE OPEN SPACES IN COLUMN {choice} ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+            elif choice < 1:
+                choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO LOW ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
                 continue
-        elif choice < 1:
-            choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO LOW ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
-            continue
-        else:
-            choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
-            continue
+            else:
+                choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+                continue
+    except:
+        choice = reprompt_choice((" " * 24) + "*** VALUE IS NOT A NUMBER ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
 
 
 def find_open_row(choice):
@@ -99,10 +104,9 @@ if __name__ == "__main__":
    refresh_grid()
 
    while game_over == False:
-      choice = int(input("Player " + str(player + 1) + ", please choose a column (1-7):"))
-      check_choice()
-      row = find_open_row(choice)
-      place_piece(row, choice)
-      refresh_grid()
-      check_win()
-      swap_players()
+        get_player_choice()
+        row = find_open_row(choice)
+        place_piece(row, choice)
+        refresh_grid()
+        check_win()
+        swap_players()
