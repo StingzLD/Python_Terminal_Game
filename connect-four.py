@@ -1,5 +1,6 @@
 import os
 import sys
+import time
 
 BANNER = '''
 _________                                     __    ___________                 
@@ -81,8 +82,35 @@ def place_piece(row, choice):
 
 def check_win():
     # Check the row of the last placed piece to see if there are four in a row
+    count = 0
+    for column in grid[row]:
+        if column != player + 1:
+            count = 0
+        elif column == player + 1:
+            count += 1
+        if count >= 4:
+            player_wins()
+            break
+
+    # Check the column of the last placed piece to see if there are four in a row
+    count = 0
+    for grid_row in grid:
+        if grid_row[choice] != player + 1:
+            count = 0
+        elif grid_row[choice] == player + 1:
+            count += 1
+        print(count)
+        if count >= 4:
+            player_wins()
+            break
+    
     # Else, check to see if there are four in a row diagonally to the last placed piece
-    pass
+    
+
+def player_wins():
+    global game_over
+    game_over = True
+    print((" " * 31) + "PLAYER " + str(player + 1) + " WINS!!!")
 
 # Refresh grid with new selection
 def refresh_grid():
