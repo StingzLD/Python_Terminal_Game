@@ -21,9 +21,15 @@ game_over = False
 # Creates a blank grid for a new game
 def new_grid() -> list:
     grid = [
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
-        [0,0,0,0,0,0,0],
+        #[0,0,0,0,0,0,0],
+        #[0,0,0,0,0,0,0],
+        #[0,0,0,0,0,0,0],
+        #[0,0,0,0,0,0,0],
+        #[0,0,0,0,0,0,0],
+        #[0,0,0,0,0,0,0]
+        [1,2,1,2,1,2,1],
+        [2,1,2,1,2,1,2],
+        [1,2,1,2,1,2,1],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]
@@ -48,7 +54,6 @@ def reprompt_choice(msg):
 # Ensure the selected column is a valid choice, if not reprompt until it is
 def get_player_choice():
     global choice
-    global player
 
     choice = int(input("Player " + str(player + 1) + ", please choose a column (1-7):"))
 
@@ -71,13 +76,13 @@ def get_player_choice():
             continue
 
 # Find the next available row for the player's chosen column
-def find_open_row(choice):
+def find_open_row():
     for row in range(ROWS):
         if grid[row][choice -1] == 0:
             return row
 
 # Update the grid
-def place_piece(row, choice):
+def place_piece():
     grid[row][choice - 1] = player + 1
 
 def check_win():
@@ -90,25 +95,45 @@ def check_win():
             count += 1
         if count >= 4:
             player_wins()
-            break
+            exit()
 
     # Check the column of the last placed piece to see if there are four in a row
     count = 0
     for grid_row in grid:
-        if grid_row[choice] != player + 1:
+        if grid_row[choice - 1] != player + 1:
             count = 0
-        elif grid_row[choice] == player + 1:
+        elif grid_row[choice - 1] == player + 1:
             count += 1
-        print(count)
         if count >= 4:
             player_wins()
-            break
+            exit()
     
     # Else, check to see if there are four in a row diagonally to the last placed piece
+    count = 0
+    current_row = row
+    current_column = choice - 1
+    while current_row != 0 and current_column != 0:
+        current_row -= 1
+        current_column -= 1
+    lowest_row = current_row
+    lowest_column = current_column
     
+
+    # Check if there are any spots left to place pieces
+    count = 0
+    for column in range(len(grid[ROWS - 1])):
+        if grid[ROWS-1][column] == 0:
+            break
+        else:
+            count += 1
+    if count == COLUMNS:
+        print((" " * 33) + "IT'S A TIE!!!")
+        exit()
+
 
 def player_wins():
     global game_over
+    
     game_over = True
     print((" " * 31) + "PLAYER " + str(player + 1) + " WINS!!!")
 
@@ -122,6 +147,7 @@ def refresh_grid():
 # Swap player turn
 def swap_players():
     global player
+
     player = ((player + 1) % 2)
 
 # Start the game    
@@ -131,8 +157,8 @@ if __name__ == "__main__":
 
    while game_over == False:
         get_player_choice()
-        row = find_open_row(choice)
-        place_piece(row, choice)
+        row = find_open_row()
+        place_piece()
         refresh_grid()
         check_win()
         swap_players()
