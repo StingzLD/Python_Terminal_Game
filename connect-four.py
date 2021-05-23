@@ -35,13 +35,6 @@ def print_grid(grid):
         print((" " * 28) + str(grid[-(row + 1)]))
     print("\n")
 
-# Delete previous two lines in terminal
-def delete_lines():
-    sys.stdout.write('\x1b[1A') # Move cursor up one line
-    sys.stdout.write('\x1b[2K') # Delete line
-    sys.stdout.write('\x1b[1A') # Move cursor up one line
-    sys.stdout.write('\x1b[2K') # Delete line
-
 # Ensure the selected column is a valid choice, if not reprompt until it is
 def get_player_choice():
     global choice
@@ -68,6 +61,13 @@ def get_player_choice():
         else:
             choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
             continue
+
+# Delete previous two lines in terminal
+def delete_lines():
+    sys.stdout.write('\x1b[1A') # Move cursor up one line
+    sys.stdout.write('\x1b[2K') # Delete line
+    sys.stdout.write('\x1b[1A') # Move cursor up one line
+    sys.stdout.write('\x1b[2K') # Delete line
 
 # Prompt for new choice
 def reprompt_choice(msg):
