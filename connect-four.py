@@ -21,15 +21,9 @@ game_over = False
 # Creates a blank grid for a new game
 def new_grid() -> list:
     grid = [
-        #[0,0,0,0,0,0,0],
-        #[0,0,0,0,0,0,0],
-        #[0,0,0,0,0,0,0],
-        #[0,0,0,0,0,0,0],
-        #[0,0,0,0,0,0,0],
-        #[0,0,0,0,0,0,0]
-        [1,2,1,2,1,2,1],
-        [2,1,2,1,2,1,2],
-        [1,2,1,2,1,2,1],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
+        [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0],
         [0,0,0,0,0,0,0]
@@ -104,6 +98,7 @@ def find_open_row():
 def place_piece():
     grid[row][choice - 1] = player + 1
 
+# Perform a series of checks to see if the current player has won
 def check_win():
     # Check the row of the last placed piece to see if there are four in a row
     count = 0
