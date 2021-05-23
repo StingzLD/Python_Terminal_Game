@@ -42,20 +42,21 @@ def print_grid(grid):
         print((" " * 28) + str(grid[-(row + 1)]))
     print("\n")
 
-# Delete previous two lines in terminal and prompt for new choice
-def reprompt_choice(msg):
+# Delete previous two lines in terminal
+def delete_lines():
     sys.stdout.write('\x1b[1A') # Move cursor up one line
     sys.stdout.write('\x1b[2K') # Delete line
     sys.stdout.write('\x1b[1A') # Move cursor up one line
     sys.stdout.write('\x1b[2K') # Delete line
-    new_choice = int(input(msg))
-    return new_choice
- 
+
 # Ensure the selected column is a valid choice, if not reprompt until it is
 def get_player_choice():
     global choice
 
-    choice = int(input("Player " + str(player + 1) + ", please choose a column (1-7):"))
+    try:
+        choice = int(input("Player " + str(player + 1) + ", please choose a column (1-7):"))
+    except:
+        choice = retry()
 
     while True:
         if choice >= 1 and choice <= 7:
@@ -74,6 +75,24 @@ def get_player_choice():
         else:
             choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
             continue
+
+# Prompt for new choice
+def reprompt_choice(msg):
+    delete_lines()
+    try:
+        new_choice = int(input(msg))
+    except:
+        new_choice = retry()  
+    return new_choice
+
+# Give user another chance to enter an integer, otherwise they forfeit the game
+def retry():
+    try:
+        delete_lines()
+        new_choice = int(input((" " * 24) + "*** A NUMBER WAS NOT ENTERED ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):"))
+        return new_choice
+    except:
+        end_game()
 
 # Find the next available row for the player's chosen column
 def find_open_row():
@@ -95,7 +114,7 @@ def check_win():
             count += 1
         if count >= 4:
             player_wins()
-            exit()
+            return
 
     # Check the column of the last placed piece to see if there are four in a row
     count = 0
@@ -106,18 +125,49 @@ def check_win():
             count += 1
         if count >= 4:
             player_wins()
-            exit()
+            return
     
-    # Else, check to see if there are four in a row diagonally to the last placed piece
-    count = 0
+    # Check to see if there are four in a row diagonally going up from left to right
     current_row = row
     current_column = choice - 1
+    count = 0
     while current_row != 0 and current_column != 0:
         current_row -= 1
         current_column -= 1
-    lowest_row = current_row
-    lowest_column = current_column
-    
+    try:
+        while current_row <= ROWS - 1 and current_column <= COLUMNS - 1:
+            if grid[current_row][current_column] == player + 1:
+                count += 1
+            else:
+                count = 0
+            if count >= 4:
+                player_wins()
+                return
+            current_row += 1
+            current_column += 1
+    except:
+        pass
+
+    # Check to see if there are four in a row diagonally going up from right to left
+    current_row = row
+    current_column = choice - 1
+    count = 0
+    while current_row != 0 and current_column != COLUMNS - 1:
+        current_row -= 1
+        current_column += 1
+    try:
+        while current_row <= ROWS - 1 and current_column >= 0:
+            if grid[current_row][current_column] == player + 1:
+                count += 1
+            else:
+                count = 0
+            if count >= 4:
+                player_wins()
+                return
+            current_row += 1
+            current_column -= 1
+    except:
+        pass
 
     # Check if there are any spots left to place pieces
     count = 0
@@ -128,14 +178,21 @@ def check_win():
             count += 1
     if count == COLUMNS:
         print((" " * 33) + "IT'S A TIE!!!")
-        exit()
+        return
 
-
+# End game and display the winning player
 def player_wins():
     global game_over
     
     game_over = True
     print((" " * 31) + "PLAYER " + str(player + 1) + " WINS!!!")
+
+# End game if current user does not enter an integer twice in a row
+def end_game():
+    swap_players()
+    delete_lines()
+    print("\n" + (" " * 31) + "PLAYER " + str(player + 1) + " WINS!!!")
+    exit()
 
 # Refresh grid with new selection
 def refresh_grid():
