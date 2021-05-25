@@ -32,15 +32,23 @@ def new_grid() -> list:
 # Prints each row in the grid's list, but in reverse row order, so the 0 row will be on the bottom
 def print_grid(grid):
     for row in range(len(grid)):
-        print((" " * 28) + str(grid[-(row + 1)]))
+        print(f"{' ' * 28} {grid[-(row + 1)]}")
     print("\n")
+
+# Get the current player number
+def get_player():
+    return player + 1
+
+# Prompt for player's choice
+def player_prompt():
+    return f"Player {get_player()}, please choose a column (1-7):"
 
 # Ensure the selected column is a valid choice, if not reprompt until it is
 def get_player_choice():
     global choice
 
     try:
-        choice = int(input("Player " + str(player + 1) + ", please choose a column (1-7):"))
+        choice = int(input(player_prompt()))
     except:
         choice = retry()
 
@@ -50,17 +58,24 @@ def get_player_choice():
                 if choice in range(1, COLUMNS + 1):
                     break
                 else:
-                    choice = reprompt_choice((" " * 24) + "*** INVALID COLUMN NUMBER ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+                    choice = reprompt_choice(error_msg("INVALID COLUMN NUMBER"))
                     continue
             else:
-                choice = reprompt_choice((" " * 24) + f"*** NO MORE OPEN SPACES IN COLUMN {choice} ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+                choice = reprompt_choice(error_msg("NO MORE OPEN SPACES IN COLUMN", choice))
                 continue
         elif choice < 1:
-            choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO LOW ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+            choice = reprompt_choice(error_msg("COLUMN NUMBER TOO LOW"))
             continue
         else:
-            choice = reprompt_choice((" " * 24) + "*** COLUMN NUMBER TOO HIGH ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):")
+            choice = reprompt_choice(error_msg("COLUMN NUMBER TOO HIGH"))
             continue
+
+# Error messages
+def error_msg(msg, choice=None):
+    if choice != None:
+        return f"{' ' * 24} *** {msg} {choice} ***\n{player_prompt()}"
+    else:
+        return f"{' ' * 24} *** {msg} ***\n{player_prompt()}"
 
 # Delete previous two lines in terminal
 def delete_lines():
@@ -82,7 +97,7 @@ def reprompt_choice(msg):
 def retry():
     try:
         delete_lines()
-        new_choice = int(input((" " * 24) + "*** A NUMBER WAS NOT ENTERED ***\nPlayer " + str(player + 1) + ", please enter a valid column number (1-7):"))
+        new_choice = int(input(error_msg("A NUMBER WAS NOT ENTERED")))
         return new_choice
     except:
         end_game()
@@ -95,16 +110,18 @@ def find_open_row():
 
 # Update the grid
 def place_piece():
-    grid[row][choice - 1] = player + 1
+    grid[row][choice - 1] = get_player()
 
 # Perform a series of checks to see if the current player has won
 def check_win():
+    global game_over
+
     # Check the row of the last placed piece to see if there are four in a row
     count = 0
     for column in grid[row]:
-        if column != player + 1:
+        if column != get_player():
             count = 0
-        elif column == player + 1:
+        elif column == get_player():
             count += 1
         if count >= 4:
             player_wins()
@@ -113,9 +130,9 @@ def check_win():
     # Check the column of the last placed piece to see if there are four in a row
     count = 0
     for grid_row in grid:
-        if grid_row[choice - 1] != player + 1:
+        if grid_row[choice - 1] != get_player():
             count = 0
-        elif grid_row[choice - 1] == player + 1:
+        elif grid_row[choice - 1] == get_player():
             count += 1
         if count >= 4:
             player_wins()
@@ -130,7 +147,7 @@ def check_win():
         current_column -= 1
     try:
         while current_row <= ROWS - 1 and current_column <= COLUMNS - 1:
-            if grid[current_row][current_column] == player + 1:
+            if grid[current_row][current_column] == get_player():
                 count += 1
             else:
                 count = 0
@@ -151,7 +168,7 @@ def check_win():
         current_column += 1
     try:
         while current_row <= ROWS - 1 and current_column >= 0:
-            if grid[current_row][current_column] == player + 1:
+            if grid[current_row][current_column] == get_player():
                 count += 1
             else:
                 count = 0
@@ -171,21 +188,26 @@ def check_win():
         else:
             count += 1
     if count == COLUMNS:
-        print((" " * 33) + "IT'S A TIE!!!")
+        print(f"{' ' * 33} IT'S A TIE!!!")
+        game_over = True
         return
+
+# Displays the winning player
+def winner():
+    return f"{' ' * 31} PLAYER {get_player()} WINS!!!"
 
 # End game and display the winning player
 def player_wins():
     global game_over
     
     game_over = True
-    print((" " * 31) + "PLAYER " + str(player + 1) + " WINS!!!")
+    print(winner())
 
 # End game if current user does not enter an integer twice in a row
 def end_game():
     swap_players()
     delete_lines()
-    print("\n" + (" " * 31) + "PLAYER " + str(player + 1) + " WINS!!!")
+    print(f"\n{winner()}")
     exit()
 
 # Refresh grid with new selection
@@ -193,23 +215,23 @@ def refresh_grid():
     os.system('cls' if os.name == 'nt' else 'clear')
     print(BANNER)
     print_grid(grid)
-    print((" " * 29) + "1  2  3  4  5  6  7\n")
+    print(f"{' ' * 29} 1  2  3  4  5  6  7\n")
 
 # Swap player turn
 def swap_players():
     global player
 
-    player = ((player + 1) % 2)
+    player = ((get_player()) % 2)
 
 # Start the game    
 if __name__ == "__main__":
-   grid = new_grid()
-   refresh_grid()
+    grid = new_grid()
+    refresh_grid()
 
-   while game_over == False:
-        get_player_choice()
-        row = find_open_row()
-        place_piece()
-        refresh_grid()
-        check_win()
-        swap_players()
+    while game_over == False:
+            get_player_choice()
+            row = find_open_row()
+            place_piece()
+            refresh_grid()
+            check_win()
+            swap_players()
