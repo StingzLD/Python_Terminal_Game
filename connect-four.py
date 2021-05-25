@@ -229,9 +229,9 @@ if __name__ == "__main__":
     refresh_grid()
 
     while game_over == False:
-            get_player_choice()
-            row = find_open_row()
-            place_piece()
-            refresh_grid()
-            check_win()
-            swap_players()
+        get_player_choice()
+        row = find_open_row()
+        place_piece()
+        refresh_grid()
+        check_win()
+        swap_players()
