@@ -20,7 +20,7 @@ game_over = False
 
 # Creates a blank grid for a new game
 def new_grid() -> list:
-    grid = [
+    return [
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0],
@@ -28,7 +28,6 @@ def new_grid() -> list:
         [0, 0, 0, 0, 0, 0, 0],
         [0, 0, 0, 0, 0, 0, 0]
     ]
-    return grid
 
 
 # Prints each row in the grid's list, but in reverse row order, so the 0 row will be on the bottom
@@ -82,11 +81,11 @@ def get_player_choice():
 
 
 # Error messages
-def error_msg(msg, choice=None):
-    if choice is None:
+def error_msg(msg, column=None):
+    if column is None:
         return f"{' ' * 24} *** {msg} ***\n{player_prompt()}"
     else:
-        return f"{' ' * 24} *** {msg} {choice} ***\n{player_prompt()}"
+        return f"{' ' * 24} *** {msg} {column} ***\n{player_prompt()}"
 
 
 # Delete previous two lines in terminal
