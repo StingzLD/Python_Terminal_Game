@@ -66,10 +66,12 @@ def get_player_choice():
                 if choice in range(1, COLUMNS + 1):
                     break
                 else:
-                    choice = reprompt_choice(error_msg("INVALID COLUMN NUMBER"))
+                    choice = reprompt_choice(
+                        error_msg("INVALID COLUMN NUMBER"))
                     continue
             else:
-                choice = reprompt_choice(error_msg("NO MORE OPEN SPACES IN COLUMN", choice))
+                choice = reprompt_choice(
+                    error_msg("NO MORE OPEN SPACES IN COLUMN", choice))
                 continue
         elif choice < 1:
             choice = reprompt_choice(error_msg("COLUMN NUMBER TOO LOW"))
@@ -200,7 +202,7 @@ def check_win():
             count += 1
         else:
             count = 0
-            
+
         if count >= 4:
             player_wins()
             return
